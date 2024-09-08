@@ -2,28 +2,19 @@ import { Alert, StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import LoginForm from "~/components/auth/LoginForm";
-import axios from "axios";
-import { Text } from "tamagui";
+import { useAuthContext } from "~/providers/auth-provider";
 
 const SignIn = () => {
-  const onSubmit = async (values: any) => {
-    try {
-      const response = await axios.post("http://192.168.1.10:3001/auth/login", {
-        username: values.username,
-        password: values.password,
-      });
+  const { onLogin, loading } = useAuthContext();
 
-      if (response.status === 200) {
-        Alert.alert("Login Successful", response.data.messages);
-      }
-    } catch (error) {
-      Alert.alert("Login Successful", error.message);
-    }
+  const onSubmit = async (values: any) => {
+    await onLogin!({ username: values.username, password: values.password });
   };
 
+  useEffect(() => {}, []);
   return (
     <SafeAreaView style={styles.safeArea}>
-      <LoginForm onSubmit={onSubmit} />
+      <LoginForm onSubmit={onSubmit} loading={loading!} />
     </SafeAreaView>
   );
 };

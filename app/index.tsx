@@ -8,8 +8,14 @@ const App = () => {
     <SafeAreaView style={{ height: "100%" }}>
       <View flex={1} justifyContent="center" alignItems="center" rowGap={"$4"}>
         <Text fontSize={24}>Welcome</Text>
-        <Button theme={"blue_active"} onPress={() => router.push("/sign-in")}>
+        <Button
+          theme={"blue_active"}
+          onPress={() => router.push("/(auth)/sign-in")}
+        >
           Continue
+        </Button>
+        <Button theme={"blue_active"} onPress={() => router.push("/(tabs)/")}>
+          Go Main
         </Button>
       </View>
     </SafeAreaView>

@@ -1,19 +1,31 @@
 import React from "react";
-import { Button, Form, Input, Label, Text, View, YStack } from "tamagui";
+import {
+  Button,
+  Form,
+  Input,
+  Label,
+  Spinner,
+  Text,
+  View,
+  YStack,
+} from "tamagui";
 import { z } from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const LoginFormSchema = z.object({
-  username: z.string(),
-  password: z.string().min(5, { message: "Password lenght must more than 8!" }),
+  username: z
+    .string()
+    .min(3, { message: "Username must be at least 3 characters long!" }),
+  password: z.string().min(5, { message: "Password lenght must more than 5!" }),
 });
 
 type Props = {
   onSubmit: (values: z.infer<typeof LoginFormSchema>) => void;
+  loading: boolean;
 };
 
-const LoginForm = ({ onSubmit }: Props) => {
+const LoginForm = ({ onSubmit, loading }: Props) => {
   const {
     control,
     handleSubmit,
@@ -38,7 +50,7 @@ const LoginForm = ({ onSubmit }: Props) => {
       onSubmit={handleSubmit(submit)}
     >
       <YStack w={"80%"}>
-        <Label>Email</Label>
+        <Label>Username</Label>
         <Controller
           name="username"
           control={control}
@@ -47,7 +59,7 @@ const LoginForm = ({ onSubmit }: Props) => {
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
-              placeholder={"Enter your email"}
+              placeholder={"Enter your username"}
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}
@@ -78,8 +90,10 @@ const LoginForm = ({ onSubmit }: Props) => {
           <Text color={"red"}>{errors.password.message}</Text>
         )}
       </YStack>
-      <Form.Trigger asChild>
-        <Button>Submit</Button>
+      <Form.Trigger asChild disabled={loading}>
+        <Button theme={"blue"} icon={loading ? <Spinner /> : undefined}>
+          Login
+        </Button>
       </Form.Trigger>
     </Form>
   );
