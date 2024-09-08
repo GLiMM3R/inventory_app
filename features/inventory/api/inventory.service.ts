@@ -14,3 +14,15 @@ export const fetchInventories = async (filters: any) => {
     throw new Error("Failed to fetch inventories");
   }
 };
+
+export const fetchInventoryById = async (id: string) => {
+  try {
+    const response = await axios.get<Response<Inventory>>(
+      `${process.env.EXPO_PUBLIC_API_URL}/inventories/${id}`
+    );
+
+    return response.data.data;
+  } catch (error) {
+    throw new Error("Failed to fetch inventory");
+  }
+};

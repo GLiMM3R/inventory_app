@@ -1,9 +1,9 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, FlatList } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGetInventories } from "~/features/inventory/query/use-get-inventories";
-import { Button, Image, Input, ListItem, XStack } from "tamagui";
-import { ScanBarcode } from "lucide-react-native";
+import { Button, Image, Input, ListItem, XStack, YGroup } from "tamagui";
+import { ImageIcon, Plus, ScanBarcode } from "lucide-react-native";
 
 const Sale = () => {
   const [filters, setFilters] = useState();
@@ -15,14 +15,28 @@ const Sale = () => {
   }, []);
   return (
     <SafeAreaView style={styles.safeArea}>
-      <XStack alignItems="center">
-        <Input flex={1} paddingLeft={44} />
-        <ScanBarcode
-          color={"black"}
-          size={32}
-          style={{ position: "absolute", left: 8 }}
+      <YGroup alignSelf="center" width={"100%"} size="$4">
+        <FlatList
+          data={data?.data ?? []}
+          contentContainerStyle={{ gap: 5, padding: 5 }}
+          keyExtractor={(item) => item.inventory_id}
+          renderItem={({ item }) => (
+            <YGroup.Item>
+              <ListItem
+                pressTheme
+                title={item.name}
+                subTitle={`Qty: ${item.quantity}`}
+                icon={() => <ImageIcon size={48} color={"gray"} />}
+                iconAfter={() => (
+                  <Button icon={<Plus />} onPress={() => alert("added")} />
+                )}
+              >
+                {"$" + item.price.toFixed(2)}
+              </ListItem>
+            </YGroup.Item>
+          )}
         />
-      </XStack>
+      </YGroup>
     </SafeAreaView>
   );
 };
@@ -32,7 +46,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff", // Background color for the splash screen
     height: "100%",
-    padding: 16,
+    paddingHorizontal: 16,
+    gap: 8,
   },
 });
 

@@ -39,8 +39,8 @@ const AuthProvider: React.FC<Props> = ({ children }) => {
   const mutationLogout = useLogout();
 
   const getSession = async () => {
-    const session = await SecureStorage.getItemAsync("session");
-    if (session) {
+    const refresh_token = await SecureStorage.getItemAsync("refresh_token");
+    if (refresh_token) {
       setIsAuthenticated(true);
       router.replace("/(tabs)/");
       router.canGoBack();

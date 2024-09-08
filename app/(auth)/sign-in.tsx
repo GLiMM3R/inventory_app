@@ -1,5 +1,5 @@
-import { Alert, StyleSheet } from "react-native";
-import React, { useEffect, useState } from "react";
+import { StyleSheet } from "react-native";
+import React, { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import LoginForm from "~/components/auth/LoginForm";
 import { useAuthContext } from "~/providers/auth-provider";
@@ -11,7 +11,6 @@ const SignIn = () => {
     await onLogin!({ username: values.username, password: values.password });
   };
 
-  useEffect(() => {}, []);
   return (
     <SafeAreaView style={styles.safeArea}>
       <LoginForm onSubmit={onSubmit} loading={loading!} />

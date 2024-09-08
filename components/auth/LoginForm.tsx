@@ -78,11 +78,11 @@ const LoginForm = ({ onSubmit, loading }: Props) => {
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
-              textContentType="password"
               placeholder="Enter your password"
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}
+              secureTextEntry={true}
             />
           )}
         />
