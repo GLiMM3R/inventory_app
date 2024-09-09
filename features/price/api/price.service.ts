@@ -9,7 +9,6 @@ type Props = {
 };
 
 export const fetchInfinityPrices = async ({ pageParam }: Props) => {
-  console.log("🚀 ~ fetchInfinityPrices ~ pageParam:", pageParam);
   try {
     const response = await axios.get<Response<Price[]>>(`/prices`, {
       params: {
@@ -24,8 +23,6 @@ export const fetchInfinityPrices = async ({ pageParam }: Props) => {
 };
 
 export const fetchPrices = async ({ pageParam, inventory_id }: Props) => {
-  console.log("🚀 ~ fetchPrices ~ inventory_id:", inventory_id);
-  console.log("🚀 ~ fetchPrices ~ pageParam:", pageParam);
   try {
     const response = await axios.get<Response<Price[]>>(`/prices`, {
       params: {

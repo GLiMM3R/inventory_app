@@ -5,10 +5,10 @@ import * as SecureStorage from "expo-secure-store";
 
 export const login = async (username: string, password: string) => {
   try {
-    const response = await axios.post<Response<Auth>>(
-      `${process.env.EXPO_PUBLIC_API_URL}/auth/login`,
-      { username, password }
-    );
+    const response = await axios.post<Response<Auth>>(`/auth/login`, {
+      username,
+      password,
+    });
 
     return response.data.data;
   } catch (error) {
@@ -24,15 +24,11 @@ export const logout = async () => {
       throw new Error("No session found");
     }
 
-    await axios.post(
-      `${process.env.EXPO_PUBLIC_API_URL}/auth/logout`,
-      undefined,
-      {
-        headers: {
-          Authorization: `Bearer ${refresh_token}`,
-        },
-      }
-    );
+    await axios.post(`/auth/logout`, undefined, {
+      headers: {
+        Authorization: `Bearer ${refresh_token}`,
+      },
+    });
 
     await SecureStorage.deleteItemAsync("session");
   } catch (error) {

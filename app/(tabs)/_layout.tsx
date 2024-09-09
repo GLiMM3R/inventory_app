@@ -12,6 +12,7 @@ import {
   ScanBarcode,
   Search,
 } from "lucide-react-native";
+import { TouchableOpacity } from "react-native";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -54,15 +55,12 @@ export default function TabLayout() {
               name={focused ? "cube" : "cube-outline"}
               color={color}
             />
-            // <Package size={24} color={color} />
           ),
           headerRight: () => (
             <XStack mr={8}>
-              <Button
-                icon={<PlusCircleIcon size={24} />}
-                size={"$2"}
-                chromeless
-              />
+              <TouchableOpacity onPress={() => router.push("/items/create")}>
+                <PlusCircleIcon color={"black"} />
+              </TouchableOpacity>
             </XStack>
           ),
         }}

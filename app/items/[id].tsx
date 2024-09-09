@@ -1,24 +1,17 @@
-import React, { useEffect } from "react";
-import { Text, StyleSheet, FlatList, SectionList } from "react-native";
+import React, { useState } from "react";
+import { Text, StyleSheet, Touchable, TouchableOpacity } from "react-native";
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import { useGetInventory } from "~/features/inventory/query/use-get-inventory";
 import { Ionicons } from "@expo/vector-icons";
 import ParallaxScrollView from "~/components/ParallaxScrollView";
-import {
-  Button,
-  H4,
-  ListItem,
-  ScrollView,
-  Separator,
-  View,
-  XGroup,
-} from "tamagui";
-import { useGetPrices } from "~/features/price/query/use-get-prices";
-import dayjs from "dayjs";
+import { Button, H4, Separator, View, XGroup, XStack } from "tamagui";
+import { Edit, History } from "lucide-react-native";
+import SheetComponent from "~/components/Sheet";
 
 const ItemDetail = () => {
   const { id } = useLocalSearchParams();
   const { data: inventory } = useGetInventory(id.toString());
+  const [open, setOpen] = useState(false);
 
   return (
     <ParallaxScrollView
@@ -27,7 +20,25 @@ const ItemDetail = () => {
         <Ionicons size={310} name="code-slash" style={styles.headerImage} />
       }
     >
-      <Stack.Screen options={{ title: "" }} />
+      <Stack.Screen
+        options={{
+          title: "Product detail",
+          headerRight: () => (
+            <XStack gap={8}>
+              <TouchableOpacity
+                onPress={() => router.push(`/items/price/${id}`)}
+              >
+                <History color={"black"} />
+              </TouchableOpacity>
+            </XStack>
+          ),
+        }}
+      />
+      {open && (
+        <SheetComponent open={open} onOpenChange={setOpen}>
+          <Text>Test</Text>
+        </SheetComponent>
+      )}
       <H4>{inventory?.name}</H4>
       <Separator alignSelf="stretch" marginHorizontal={0} marginVertical={1} />
       <View
@@ -65,15 +76,15 @@ const ItemDetail = () => {
         alignItems="center"
         bottom={10}
         right={16}
-        w={"100%"}
       >
-        <XGroup>
-          <Button>Move</Button>
-          <Button>Add</Button>
-          <Button onPress={() => router.push(`/items/price/${id}`)}>
-            Price
-          </Button>
-        </XGroup>
+        <Button
+          circular
+          size={"$5"}
+          theme={"blue"}
+          onPress={() => setOpen(true)}
+        >
+          <Edit color={"black"} />
+        </Button>
       </View>
     </ParallaxScrollView>
   );

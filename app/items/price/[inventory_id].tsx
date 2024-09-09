@@ -1,15 +1,9 @@
-import { View, Text, SafeAreaView, FlatList } from "react-native";
+import { SafeAreaView, FlatList } from "react-native";
 import React from "react";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { useGetPrices } from "~/features/price/query/use-get-prices";
-import { ListItem, Spinner, XStack, YGroup } from "tamagui";
+import { ListItem, YGroup } from "tamagui";
 import dayjs from "dayjs";
-import { History } from "lucide-react-native";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import {
-  fetchInfinityPrices,
-  fetchPrices,
-} from "~/features/price/api/price.service";
 
 const Price = () => {
   const { inventory_id } = useLocalSearchParams();

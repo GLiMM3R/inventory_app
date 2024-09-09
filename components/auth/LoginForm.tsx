@@ -1,14 +1,5 @@
 import React from "react";
-import {
-  Button,
-  Form,
-  Input,
-  Label,
-  Spinner,
-  Text,
-  View,
-  YStack,
-} from "tamagui";
+import { Button, Form, Input, Label, Spinner, Text, YStack } from "tamagui";
 import { z } from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
