@@ -1,27 +1,24 @@
-import React from "react";
-import { Text, StyleSheet } from "react-native";
-import { Stack, useLocalSearchParams } from "expo-router";
+import React, { useEffect } from "react";
+import { Text, StyleSheet, FlatList, SectionList } from "react-native";
+import { router, Stack, useLocalSearchParams } from "expo-router";
 import { useGetInventory } from "~/features/inventory/query/use-get-inventory";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import ParallaxScrollView from "~/components/ParallaxScrollView";
 import {
   Button,
-  H1,
   H4,
-  Input,
-  Label,
+  ListItem,
+  ScrollView,
   Separator,
   View,
   XGroup,
-  XStack,
-  YStack,
 } from "tamagui";
-import { ThemedText } from "~/components/ThemedText";
+import { useGetPrices } from "~/features/price/query/use-get-prices";
+import dayjs from "dayjs";
 
 const ItemDetail = () => {
   const { id } = useLocalSearchParams();
-  const { data } = useGetInventory(id.toString());
+  const { data: inventory } = useGetInventory(id.toString());
 
   return (
     <ParallaxScrollView
@@ -31,7 +28,7 @@ const ItemDetail = () => {
       }
     >
       <Stack.Screen options={{ title: "" }} />
-      <H4>{data?.name}</H4>
+      <H4>{inventory?.name}</H4>
       <Separator alignSelf="stretch" marginHorizontal={0} marginVertical={1} />
       <View
         flexDirection="row"
@@ -41,12 +38,12 @@ const ItemDetail = () => {
       >
         <View flexBasis={"48%"}>
           <Text style={styles.label}>SKU:</Text>
-          <Text>{data?.sku}</Text>
+          <Text>{inventory?.sku}</Text>
         </View>
         <View flexBasis={"48%"}>
           <Text style={styles.label}>Updated at:</Text>
           <Text>
-            {new Date(Number(data?.created_at) * 1000).toLocaleString()}
+            {new Date(Number(inventory?.created_at) * 1000).toLocaleString()}
           </Text>
         </View>
       </View>
@@ -54,13 +51,14 @@ const ItemDetail = () => {
       <View flexDirection="row" width={"100%"} justifyContent="space-between">
         <View flexBasis={"48%"}>
           <Text style={styles.label}>Qty:</Text>
-          <Text>{data?.quantity}</Text>
+          <Text>{inventory?.quantity}</Text>
         </View>
         <View flexBasis={"48%"}>
           <Text style={styles.label}>Price:</Text>
-          <Text>${data?.price}</Text>
+          <Text>${inventory?.price}</Text>
         </View>
       </View>
+      <Separator alignSelf="stretch" marginHorizontal={0} marginVertical={1} />
       <View
         position="absolute"
         justifyContent="center"
@@ -72,6 +70,9 @@ const ItemDetail = () => {
         <XGroup>
           <Button>Move</Button>
           <Button>Add</Button>
+          <Button onPress={() => router.push(`/items/price/${id}`)}>
+            Price
+          </Button>
         </XGroup>
       </View>
     </ParallaxScrollView>

@@ -1,25 +1,9 @@
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { StyleSheet, FlatList } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGetInventories } from "~/features/inventory/query/use-get-inventories";
-import {
-  Button,
-  Image,
-  Input,
-  ListItem,
-  XStack,
-  YGroup,
-  YStack,
-} from "tamagui";
-import {
-  Filter,
-  ImageIcon,
-  MoreHorizontal,
-  Plus,
-  ScanBarcode,
-  Search,
-} from "lucide-react-native";
-import { debounce } from "~/libs/utils";
+import { Input, ListItem, XStack, YGroup, YStack } from "tamagui";
+import { ImageIcon, ScanBarcode, Search } from "lucide-react-native";
 import { Href, router } from "expo-router";
 
 const Sale = () => {

@@ -45,6 +45,8 @@ instance.interceptors.response.use(
           undefined
         );
 
+        originalRequest.headers.Authorization = `Bearer ${data.data?.access_token}`;
+
         await SecureStorage.setItemAsync(
           "access_token",
           data.data?.access_token ?? ""
