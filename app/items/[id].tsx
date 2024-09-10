@@ -7,11 +7,14 @@ import ParallaxScrollView from "~/components/ParallaxScrollView";
 import { Button, H4, Separator, View, XGroup, XStack } from "tamagui";
 import { Edit, History } from "lucide-react-native";
 import SheetComponent from "~/components/Sheet";
+import DateTimePicker from "react-native-ui-datepicker";
+import dayjs from "dayjs";
 
 const ItemDetail = () => {
   const { id } = useLocalSearchParams();
   const { data: inventory } = useGetInventory(id.toString());
   const [open, setOpen] = useState(false);
+  const [date, setDate] = useState(dayjs());
 
   return (
     <ParallaxScrollView
@@ -36,7 +39,11 @@ const ItemDetail = () => {
       />
       {open && (
         <SheetComponent open={open} onOpenChange={setOpen}>
-          <Text>Test</Text>
+          <DateTimePicker
+            mode="single"
+            date={date}
+            onChange={(params) => setDate(dayjs(params.date))}
+          />
         </SheetComponent>
       )}
       <H4>{inventory?.name}</H4>
