@@ -1,15 +1,23 @@
 import { Edit } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native";
-import { Sheet } from "tamagui";
+import { Sheet, SnapPointsMode } from "tamagui";
 
 type Props = {
   children?: React.ReactNode;
   open: boolean;
+  snapPoints?: (string | number)[];
+  snapPointsMode?: SnapPointsMode;
   onOpenChange: (isOpen: boolean) => void;
 };
 
-const SheetComponent = ({ children, open, onOpenChange }: Props) => {
+const SheetComponent = ({
+  children,
+  open,
+  onOpenChange,
+  snapPoints,
+  snapPointsMode,
+}: Props) => {
   const [position, setPosition] = useState(0);
   const [modal, setModal] = useState(true);
 
@@ -20,8 +28,8 @@ const SheetComponent = ({ children, open, onOpenChange }: Props) => {
         modal={modal}
         open={open}
         onOpenChange={onOpenChange}
-        snapPoints={[50]}
-        snapPointsMode={"percent"}
+        snapPoints={snapPoints}
+        snapPointsMode={snapPointsMode}
         dismissOnSnapToBottom
         position={position}
         onPositionChange={setPosition}

@@ -18,7 +18,7 @@ export const fetchInfinityPrices = async ({ pageParam }: Props) => {
 
     return response.data.data ?? [];
   } catch (error) {
-    throw new Error("Failed to create price ");
+    throw new Error("Failed to fetch prices");
   }
 };
 
@@ -33,13 +33,13 @@ export const fetchPrices = async ({ pageParam, inventory_id }: Props) => {
 
     return response.data.data ?? [];
   } catch (error) {
-    throw new Error("Failed to create price ");
+    throw new Error("Failed to fetch prices");
   }
 };
 
 export const createPrice = async (data: PriceCreateDto) => {
   try {
-    await axios.post("/api/prices", data);
+    await axios.post("/prices", data);
   } catch (error) {
     throw new Error("Failed to create price ");
   }
