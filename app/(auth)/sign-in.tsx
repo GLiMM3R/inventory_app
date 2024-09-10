@@ -8,7 +8,10 @@ const SignIn = () => {
   const { onLogin, loading } = useAuthContext();
 
   const onSubmit = async (values: any) => {
-    await onLogin!({ username: values.username, password: values.password });
+    await onLogin!({
+      username: values.username.trim(),
+      password: values.password,
+    });
   };
 
   return (

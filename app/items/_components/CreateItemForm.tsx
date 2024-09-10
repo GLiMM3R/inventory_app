@@ -74,7 +74,12 @@ const CreateItemForm = ({ onSubmit, loading }: Props) => {
             required: true,
           }}
           render={({ field: { onChange, onBlur, value } }) => (
-            <Input onBlur={onBlur} onChangeText={onChange} value={value} />
+            <Input
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              keyboardType="numeric"
+            />
           )}
         />
         {errors.price && <Text color={"red"}>{errors.price.message}</Text>}
@@ -86,7 +91,12 @@ const CreateItemForm = ({ onSubmit, loading }: Props) => {
             required: true,
           }}
           render={({ field: { onChange, onBlur, value } }) => (
-            <Input onBlur={onBlur} onChangeText={onChange} value={value} />
+            <Input
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              keyboardType="numeric"
+            />
           )}
         />
         {errors.quantity && (
