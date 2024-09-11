@@ -1,10 +1,7 @@
-import { View, Text, Alert } from "react-native";
-import React, { useEffect, useState } from "react";
+import { View } from "react-native";
+import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useGetInventories } from "~/features/inventory/query/use-get-inventories";
 import { Button, Spinner } from "tamagui";
-import axios from "@/libs/request";
-import { useLogout } from "~/features/auth/mutation/use-logout";
 import { useAuthContext } from "~/providers/auth-provider";
 
 const Sale = () => {

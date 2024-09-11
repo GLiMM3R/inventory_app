@@ -3,8 +3,9 @@ import { z } from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Form, Input, Label, Spinner, Text, YStack } from "tamagui";
+import { Inventory } from "~/features/inventory/model/inventory";
 
-const itemFormSchema = z.object({
+const productFormSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
   quantity: z
     .string()
@@ -16,28 +17,29 @@ const itemFormSchema = z.object({
   }),
 });
 
-export type ItemFormSchema = z.infer<typeof itemFormSchema>;
+export type ProductFormSchema = z.infer<typeof productFormSchema>;
 
 type Props = {
-  onSubmit: (values: ItemFormSchema) => void;
+  onSubmit: (values: ProductFormSchema) => void;
   loading: boolean;
+  data?: Inventory;
 };
 
-const CreateItemForm = ({ onSubmit, loading }: Props) => {
+const ProductForm = ({ onSubmit, loading, data }: Props) => {
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<ItemFormSchema>({
-    resolver: zodResolver(itemFormSchema),
+  } = useForm<ProductFormSchema>({
+    resolver: zodResolver(productFormSchema),
     defaultValues: {
-      name: "",
-      quantity: "0",
-      price: "0",
+      name: data?.name ?? "",
+      quantity: data?.quantity.toString() ?? "0",
+      price: data?.price.toString() ?? "0",
     },
   });
 
-  const submit = (values: ItemFormSchema) => {
+  const submit = (values: ProductFormSchema) => {
     onSubmit(values);
   };
 
@@ -112,4 +114,4 @@ const CreateItemForm = ({ onSubmit, loading }: Props) => {
   );
 };
 
-export default CreateItemForm;
+export default ProductForm;

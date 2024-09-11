@@ -3,8 +3,13 @@ import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGetInventories } from "~/features/inventory/query/use-get-inventories";
 import { Input, ListItem, XStack, YGroup, YStack } from "tamagui";
-import { ImageIcon, ScanBarcode, Search } from "lucide-react-native";
-import { Href, router } from "expo-router";
+import {
+  ImageIcon,
+  PlusCircleIcon,
+  ScanBarcode,
+  Search,
+} from "lucide-react-native";
+import { Href, Link, router, Stack } from "expo-router";
 
 const Sale = () => {
   const [filters, setFilters] = useState("");
@@ -18,7 +23,6 @@ const Sale = () => {
   const onRefresh = async () => {
     setRefreshing(true);
     await refetch();
-    console.log("mounted");
     setRefreshing(false);
   };
 
@@ -29,31 +33,43 @@ const Sale = () => {
         contentContainerStyle={{ gap: 8, padding: 6 }}
         keyExtractor={(item) => item.inventory_id}
         renderItem={({ item }) => (
-          <ListItem
-            pressTheme
-            title={item.name}
-            subTitle={`Qty: ${item.quantity}`}
-            icon={() => <ImageIcon size={48} color={"gray"} />}
-            onPress={() => router.push(`/items/${item.inventory_id}` as Href)}
-            borderRadius={8}
-            elevation={1}
-            backgroundColor={"white"}
+          <Link
+            key={item.inventory_id}
+            href={`/detail/${item.inventory_id}`}
+            asChild
           >
-            {"$" + item.price.toFixed(2)}
-          </ListItem>
+            <ListItem
+              pressTheme
+              title={item.name}
+              subTitle={`Qty: ${item.quantity}`}
+              icon={() => <ImageIcon size={48} color={"gray"} />}
+              borderRadius={8}
+              elevation={1}
+              backgroundColor={"white"}
+            >
+              {"$" + item.price.toFixed(2)}
+            </ListItem>
+          </Link>
         )}
         ListHeaderComponent={() => (
-          <XStack alignItems="center" gap={4}>
-            <Search color={"gray"} style={styles.searchIcon} />
-            <ScanBarcode color={"gray"} style={styles.barcodeIcon} />
-            <Input
-              flex={1}
-              value={filters}
-              style={styles.searchInput}
-              placeholder="Search name, SKU"
-              onChange={() => {}}
-            />
-          </XStack>
+          <YStack gap={8}>
+            <XStack mr={8} justifyContent="flex-end">
+              <Link href={"/(tabs)/(items)/create"}>
+                <PlusCircleIcon color={"black"} />
+              </Link>
+            </XStack>
+            <XStack alignItems="center" gap={4}>
+              <Search color={"gray"} style={styles.searchIcon} />
+              <ScanBarcode color={"gray"} style={styles.barcodeIcon} />
+              <Input
+                flex={1}
+                value={filters}
+                style={styles.searchInput}
+                placeholder="Search name, SKU"
+                onChange={() => {}}
+              />
+            </XStack>
+          </YStack>
         )}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

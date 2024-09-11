@@ -6,8 +6,8 @@ import { ListItem, YGroup } from "tamagui";
 import dayjs from "dayjs";
 
 const Price = () => {
-  const { inventory_id } = useLocalSearchParams();
-  const { data, fetchNextPage } = useGetPrices(inventory_id.toString());
+  const { id } = useLocalSearchParams();
+  const { data, fetchNextPage } = useGetPrices(id.toString());
 
   return (
     <SafeAreaView>

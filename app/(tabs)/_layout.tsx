@@ -1,18 +1,11 @@
-import { router, Tabs, useRouter } from "expo-router";
+import { router, Tabs } from "expo-router";
 import React, { useEffect } from "react";
-
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { useAuthContext } from "~/providers/auth-provider";
 import { Button, XStack } from "tamagui";
-import {
-  Package,
-  PlusCircleIcon,
-  ScanBarcode,
-  Search,
-} from "lucide-react-native";
-import { TouchableOpacity } from "react-native";
+import { ScanBarcode } from "lucide-react-native";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -46,22 +39,15 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="items"
+        name="(items)"
         options={{
           title: "Items",
-          headerTitleAlign: "center",
+          headerShown: false,
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               name={focused ? "cube" : "cube-outline"}
               color={color}
             />
-          ),
-          headerRight: () => (
-            <XStack mr={8}>
-              <TouchableOpacity onPress={() => router.push("/items/create")}>
-                <PlusCircleIcon color={"black"} />
-              </TouchableOpacity>
-            </XStack>
           ),
         }}
       />
@@ -79,7 +65,6 @@ export default function TabLayout() {
           headerRight: () => (
             <XStack mr={8}>
               <Button icon={<ScanBarcode size={24} />} size={"$2"} chromeless />
-              {/* <Button icon={<Search size={24} />} size={"$2"} chromeless /> */}
             </XStack>
           ),
         }}

@@ -6,31 +6,24 @@ import {
   Alert,
   ToastAndroid,
 } from "react-native";
-import { router, Stack, useLocalSearchParams } from "expo-router";
+import { Href, router, Stack, useLocalSearchParams } from "expo-router";
 import { useGetInventory } from "~/features/inventory/query/use-get-inventory";
-import { Ionicons } from "@expo/vector-icons";
 import ParallaxScrollView from "~/components/ParallaxScrollView";
-import { Button, H4, Image, Separator, View, XStack, YStack } from "tamagui";
-import {
-  Calendar,
-  CalendarClock,
-  DollarSign,
-  Edit,
-  Edit2,
-  History,
-  Plus,
-} from "lucide-react-native";
+import { Button, H4, Image, Separator, View, XStack } from "tamagui";
+import { CalendarClock, Edit, History } from "lucide-react-native";
 import SheetComponent from "@/components/Sheet";
-import CreatePriceForm, {
-  PriceFormSchema,
-} from "./_components/CreatePriceForm";
 import { useCreatePrice } from "~/features/price/mutation/use-create-price";
 import dayjs from "dayjs";
+import CreatePriceForm, {
+  PriceFormSchema,
+} from "~/components/product/CreatePriceForm";
+import ProductForm from "~/components/product/ProductForm";
 
-const ItemDetail = () => {
+const Detail = () => {
   const { id } = useLocalSearchParams();
   const { data: inventory } = useGetInventory(id.toString());
   const [open, setOpen] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
   const [loading, setLoading] = useState(false);
   const matation = useCreatePrice();
 
@@ -75,9 +68,7 @@ const ItemDetail = () => {
           title: "Product detail",
           headerRight: () => (
             <XStack gap={12}>
-              <TouchableOpacity
-                onPress={() => router.push(`/items/price/${id}`)}
-              >
+              <TouchableOpacity onPress={() => router.push(`/`)}>
                 <History color={"black"} />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => setOpen(true)}>
@@ -95,6 +86,16 @@ const ItemDetail = () => {
           snapPointsMode="constant"
         >
           <CreatePriceForm onSubmit={onSubmit} loading={loading} />
+        </SheetComponent>
+      )}
+      {openEdit && (
+        <SheetComponent
+          open={openEdit}
+          onOpenChange={setOpenEdit}
+          snapPoints={[400]}
+          snapPointsMode="constant"
+        >
+          <ProductForm onSubmit={() => {}} data={inventory} loading />
         </SheetComponent>
       )}
       <H4>{inventory?.name}</H4>
@@ -139,7 +140,7 @@ const ItemDetail = () => {
           circular
           size={"$5"}
           theme={"blue"}
-          onPress={() => setOpen(true)}
+          onPress={() => setOpenEdit(true)}
         >
           <Edit color={"black"} />
         </Button>
@@ -169,4 +170,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ItemDetail;
+export default Detail;
