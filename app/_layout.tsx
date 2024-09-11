@@ -15,6 +15,7 @@ import { tamaguiConfig } from "../tamagui.config";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import AuthProvider from "~/providers/auth-provider";
 import { PortalProvider } from "@tamagui/portal";
+import { CartProvider } from "~/providers/cart-provider";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -43,14 +44,22 @@ export default function RootLayout() {
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <QueryClientProvider client={queryClient}>
           <AuthProvider>
-            <PortalProvider shouldAddRootHost>
-              <Stack>
-                <Stack.Screen name="index" options={{ headerShown: false }} />
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-                <Stack.Screen name="+not-found" />
-              </Stack>
-            </PortalProvider>
+            <CartProvider>
+              <PortalProvider shouldAddRootHost>
+                <Stack>
+                  <Stack.Screen name="index" options={{ headerShown: false }} />
+                  <Stack.Screen
+                    name="(tabs)"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="(auth)"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen name="+not-found" />
+                </Stack>
+              </PortalProvider>
+            </CartProvider>
           </AuthProvider>
         </QueryClientProvider>
       </ThemeProvider>

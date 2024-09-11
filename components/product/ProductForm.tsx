@@ -1,26 +1,15 @@
 import React from "react";
-import { z } from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Form, Input, Label, Spinner, Text, YStack } from "tamagui";
 import { Inventory } from "~/features/inventory/model/inventory";
-
-const productFormSchema = z.object({
-  name: z.string().min(1, { message: "Name is required" }),
-  quantity: z
-    .string()
-    .refine((val) => !isNaN(Number(val)) && Number(val) >= 0, {
-      message: "Quantity must be a non-negative number",
-    }),
-  price: z.string().refine((val) => !isNaN(Number(val)) && Number(val) > 0, {
-    message: "Price must be a positive number",
-  }),
-});
-
-export type ProductFormSchema = z.infer<typeof productFormSchema>;
+import {
+  InventorySchema,
+  InventorySchemaType,
+} from "~/features/inventory/schema/inventory-schema";
 
 type Props = {
-  onSubmit: (values: ProductFormSchema) => void;
+  onSubmit: (values: InventorySchemaType) => void;
   loading: boolean;
   data?: Inventory;
 };
@@ -30,8 +19,8 @@ const ProductForm = ({ onSubmit, loading, data }: Props) => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<ProductFormSchema>({
-    resolver: zodResolver(productFormSchema),
+  } = useForm<InventorySchemaType>({
+    resolver: zodResolver(InventorySchema),
     defaultValues: {
       name: data?.name ?? "",
       quantity: data?.quantity.toString() ?? "0",
@@ -39,7 +28,7 @@ const ProductForm = ({ onSubmit, loading, data }: Props) => {
     },
   });
 
-  const submit = (values: ProductFormSchema) => {
+  const submit = (values: InventorySchemaType) => {
     onSubmit(values);
   };
 

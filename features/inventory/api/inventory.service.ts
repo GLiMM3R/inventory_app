@@ -1,7 +1,7 @@
 import axios from "@/libs/request";
 import { Inventory } from "../model/inventory";
 import { Response } from "@/types/reponse";
-import { ItemFormSchema } from "~/app/items/_components/CreateItemForm";
+import { InventorySchemaType } from "../schema/inventory-schema";
 
 export const fetchInventories = async (filters: any) => {
   try {
@@ -25,7 +25,7 @@ export const fetchInventoryById = async (id: string) => {
   }
 };
 
-export const create = async (data: ItemFormSchema) => {
+export const create = async (data: InventorySchemaType) => {
   try {
     await axios.post(`/inventories`, {
       name: data.name,
@@ -34,5 +34,17 @@ export const create = async (data: ItemFormSchema) => {
     });
   } catch (error) {
     throw new Error("Create item failed");
+  }
+};
+
+export const update = async (id: string, data: InventorySchemaType) => {
+  try {
+    await axios.patch(`/inventories/${id}`, {
+      name: data.name,
+      price: Number(data.price),
+      quantity: Number(data.quantity),
+    });
+  } catch (error) {
+    throw new Error("Update item failed");
   }
 };

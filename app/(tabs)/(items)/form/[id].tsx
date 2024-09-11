@@ -2,32 +2,37 @@ import { View, Text } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router, Stack, useLocalSearchParams } from "expo-router";
-import { useCreateItem } from "~/features/inventory/mutation/use-create-item";
-import ProductForm, {
-  ProductFormSchema,
-} from "~/components/product/ProductForm";
+import ProductForm from "~/components/product/ProductForm";
+import { useGetInventory } from "~/features/inventory/query/use-get-inventory";
+import { InventorySchemaType } from "~/features/inventory/schema/inventory-schema";
+import { useUpdateItem } from "~/features/inventory/mutation/use-update-item";
 
 const Form = () => {
-  const { id } = useLocalSearchParams<{ id?: string }>();
-  const [loading, setLoading] = useState(false);
-  const mutation = useCreateItem();
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const { data } = useGetInventory(id);
 
-  const onSubmit = (values: ProductFormSchema) => {
+  const [loading, setLoading] = useState(false);
+  const mutation = useUpdateItem();
+
+  const onSubmit = (values: InventorySchemaType) => {
     setLoading(true);
-    mutation.mutate(values, {
-      onSuccess: () => {
-        setLoading(false);
-        router.push("/(tabs)/(items)");
-      },
-      onError: (error) => {
-        setLoading(false);
-      },
-    });
+    mutation.mutate(
+      { id, data: values },
+      {
+        onSuccess: () => {
+          setLoading(false);
+          router.push(`/(items)/detail/${id}`);
+        },
+        onError: (error) => {
+          setLoading(false);
+        },
+      }
+    );
   };
   return (
     <SafeAreaView>
       <View>
-        <ProductForm onSubmit={onSubmit} loading={loading} />
+        <ProductForm onSubmit={onSubmit} loading={loading} data={data} />
       </View>
     </SafeAreaView>
   );

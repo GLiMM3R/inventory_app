@@ -58,7 +58,7 @@ instance.interceptors.response.use(
         // Handle logout or redirect to login page
         await SecureStorage.deleteItemAsync("access_token");
         await SecureStorage.deleteItemAsync("refresh_token");
-        router.push("/sign-in");
+        router.replace("/(auth)/sign-in");
         router.canGoBack();
         return Promise.reject(refreshError);
       }

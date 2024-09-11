@@ -1,13 +1,15 @@
 import { SafeAreaView, FlatList } from "react-native";
 import React from "react";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { Stack, useLocalSearchParams, usePathname } from "expo-router";
 import { useGetPrices } from "~/features/price/query/use-get-prices";
 import { ListItem, YGroup } from "tamagui";
 import dayjs from "dayjs";
 
-const Price = () => {
-  const { id } = useLocalSearchParams();
-  const { data, fetchNextPage } = useGetPrices(id.toString());
+const PriceHistory = () => {
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const { data, fetchNextPage } = useGetPrices(id);
+  const path = usePathname();
+  console.log(path);
 
   return (
     <SafeAreaView>
@@ -44,4 +46,4 @@ const Price = () => {
   );
 };
 
-export default Price;
+export default PriceHistory;

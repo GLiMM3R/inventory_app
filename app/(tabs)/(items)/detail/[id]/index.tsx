@@ -6,7 +6,14 @@ import {
   Alert,
   ToastAndroid,
 } from "react-native";
-import { Href, router, Stack, useLocalSearchParams } from "expo-router";
+import {
+  Href,
+  Link,
+  router,
+  Stack,
+  useLocalSearchParams,
+  usePathname,
+} from "expo-router";
 import { useGetInventory } from "~/features/inventory/query/use-get-inventory";
 import ParallaxScrollView from "~/components/ParallaxScrollView";
 import { Button, H4, Image, Separator, View, XStack } from "tamagui";
@@ -20,8 +27,8 @@ import CreatePriceForm, {
 import ProductForm from "~/components/product/ProductForm";
 
 const Detail = () => {
-  const { id } = useLocalSearchParams();
-  const { data: inventory } = useGetInventory(id.toString());
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const { data: inventory } = useGetInventory(id);
   const [open, setOpen] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -66,11 +73,20 @@ const Detail = () => {
       <Stack.Screen
         options={{
           title: "Product detail",
+          headerShown: true,
           headerRight: () => (
             <XStack gap={12}>
-              <TouchableOpacity onPress={() => router.push(`/`)}>
-                <History color={"black"} />
-              </TouchableOpacity>
+              <Link
+                href={{
+                  pathname: "/(items)/detail/[id]/price_history",
+                  params: { id: id },
+                }}
+                asChild
+              >
+                <TouchableOpacity>
+                  <History color={"black"} />
+                </TouchableOpacity>
+              </Link>
               <TouchableOpacity onPress={() => setOpen(true)}>
                 <CalendarClock color={"black"} />
               </TouchableOpacity>
@@ -136,14 +152,16 @@ const Detail = () => {
         bottom={10}
         right={16}
       >
-        <Button
-          circular
-          size={"$5"}
-          theme={"blue"}
-          onPress={() => setOpenEdit(true)}
-        >
-          <Edit color={"black"} />
-        </Button>
+        <Link href={{ pathname: "/(items)/form/[id]", params: { id } }} asChild>
+          <Button
+            circular
+            size={"$5"}
+            theme={"blue"}
+            // onPress={() => setOpenEdit(true)}
+          >
+            <Edit color={"black"} />
+          </Button>
+        </Link>
       </View>
     </ParallaxScrollView>
   );

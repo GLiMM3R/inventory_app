@@ -1,10 +1,17 @@
 import React from "react";
-import { Stack } from "expo-router";
+import { Slot, Stack } from "expo-router";
 
 const ItemsLayout = () => {
   return (
     <Stack>
-      <Stack.Screen name="[id]" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="[id]"
+        options={{ title: "Edit product", headerShown: true }}
+      />
+      <Stack.Screen
+        name="create"
+        options={{ title: "Create new product", headerShown: true }}
+      />
     </Stack>
   );
 };

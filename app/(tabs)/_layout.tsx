@@ -6,6 +6,7 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 import { useAuthContext } from "~/providers/auth-provider";
 import { Button, XStack } from "tamagui";
 import { ScanBarcode } from "lucide-react-native";
+import { CartProvider } from "~/providers/cart-provider";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -41,7 +42,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="(items)"
         options={{
-          title: "Items",
+          title: "Products",
           headerShown: false,
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon

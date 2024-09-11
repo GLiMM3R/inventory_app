@@ -1,31 +1,37 @@
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { StyleSheet, FlatList } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGetInventories } from "~/features/inventory/query/use-get-inventories";
-import { Button, Image, Input, ListItem, XStack, YGroup } from "tamagui";
-import { ImageIcon, Plus, ScanBarcode } from "lucide-react-native";
+import { Button, ListItem, Text, YGroup } from "tamagui";
+import { ImageIcon, Plus } from "lucide-react-native";
+import { useCart } from "~/providers/cart-provider";
 
 const Sale = () => {
   const [filters, setFilters] = useState();
   const { data, refetch } = useGetInventories(filters);
-  const [inventories, setInventories] = useState([]);
+
+  const { items, addItem, removeItem } = useCart();
 
   useEffect(() => {
     refetch();
   }, []);
+  useEffect(() => {
+    console.log(items);
+  }, [items]);
   return (
     <SafeAreaView style={styles.safeArea}>
       <YGroup alignSelf="center" width={"100%"} size="$4">
         <FlatList
-          data={data?.data ?? []}
+          data={items ?? []}
           contentContainerStyle={{ gap: 5, padding: 5 }}
-          keyExtractor={(item) => item.inventory_id}
+          keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <YGroup.Item>
               <ListItem
+                key={item.id}
                 pressTheme
                 title={item.name}
-                subTitle={`Qty: ${item.quantity}`}
+                // subTitle={`Qty: ${item.quantity}`}
                 icon={() => <ImageIcon size={48} color={"gray"} />}
                 iconAfter={() => (
                   <Button icon={<Plus />} onPress={() => alert("added")} />
