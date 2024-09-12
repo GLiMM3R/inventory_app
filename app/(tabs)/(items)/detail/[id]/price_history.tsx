@@ -8,8 +8,6 @@ import dayjs from "dayjs";
 const PriceHistory = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { data, fetchNextPage } = useGetPrices(id);
-  const path = usePathname();
-  console.log(path);
 
   return (
     <SafeAreaView>

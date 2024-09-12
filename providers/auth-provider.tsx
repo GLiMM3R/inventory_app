@@ -1,23 +1,18 @@
 import { useRouter } from "expo-router";
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
-import { Alert } from "react-native";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { Alert, ToastAndroid } from "react-native";
 import { useLogin } from "~/features/auth/mutation/use-login";
 import { useLogout } from "~/features/auth/mutation/use-logout";
 import * as SecureStorage from "expo-secure-store";
-import { Text } from "tamagui";
+import { User } from "~/features/auth/model/auth";
 
 type Props = {
   children: React.ReactNode;
 };
 
 interface AuthContextProps {
-  isAuthenticated?: boolean;
+  user?: User | null;
+  setUser?: (user: User | null) => void;
   onLogin?: ({
     username,
     password,
@@ -33,23 +28,34 @@ const AuthContext = createContext<AuthContextProps>({});
 
 const AuthProvider: React.FC<Props> = ({ children }) => {
   const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const mutationLogin = useLogin();
   const mutationLogout = useLogout();
 
-  const getSession = async () => {
-    const refresh_token = await SecureStorage.getItemAsync("refresh_token");
-    if (refresh_token) {
-      setIsAuthenticated(true);
-      router.replace("/(tabs)/");
-      router.canGoBack();
-    }
-  };
-
   useEffect(() => {
-    getSession();
+    checkAuth();
   }, []);
+
+  const checkAuth = async () => {
+    setIsLoading(true);
+    try {
+      const user = await SecureStorage.getItemAsync("user");
+      const access_token = await SecureStorage.getItemAsync("access_token");
+
+      if (user && access_token) {
+        setUser(JSON.parse(user));
+        router.replace("/(tabs)/(items)/");
+        router.canGoBack();
+      } else {
+        setUser(null);
+      }
+    } catch (error) {
+      setUser(null);
+      Alert.alert("Credentials failed");
+    }
+    setIsLoading(false);
+  };
 
   const onLogin = async ({
     username,
@@ -64,13 +70,8 @@ const AuthProvider: React.FC<Props> = ({ children }) => {
       {
         onSuccess: async (data) => {
           if (data) {
-            await SecureStorage.setItemAsync("access_token", data.access_token);
-            await SecureStorage.setItemAsync(
-              "refresh_token",
-              data.refresh_token
-            );
-            setIsAuthenticated(true);
-            router.push("/(tabs)/");
+            setUser(data);
+            router.replace("/(tabs)/(items)/");
             router.canGoBack();
           }
           setIsLoading(false);
@@ -89,14 +90,20 @@ const AuthProvider: React.FC<Props> = ({ children }) => {
   const onLogout = async () => {
     mutationLogout.mutate(undefined, {
       onSuccess: async () => {
+        setUser(null);
         router.replace("/(auth)/sign-in");
-        router.canGoBack();
+      },
+      onError: (error) => {
+        setUser(null);
+        ToastAndroid.show(error.message, ToastAndroid.SHORT);
+        router.replace("/(auth)/sign-in");
       },
     });
   };
 
   const value: AuthContextProps = {
-    isAuthenticated,
+    user,
+    setUser: setUser,
     onLogin,
     onLogout,
     loading: isLoading,
@@ -113,19 +120,6 @@ export const useAuthContext = () => {
   }
 
   return context;
-};
-
-export const ProtectedRoute: React.FC<{ children: ReactNode }> = ({
-  children,
-}) => {
-  const { isAuthenticated } = useAuthContext();
-
-  if (!isAuthenticated) {
-    // Redirect to login screen or show an unauthorized message
-    return <Text>You need to be logged in to view this page.</Text>;
-  }
-
-  return <>{children}</>;
 };
 
 export default AuthProvider;

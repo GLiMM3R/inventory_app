@@ -4,20 +4,17 @@ import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { useAuthContext } from "~/providers/auth-provider";
-import { Button, XStack } from "tamagui";
-import { ScanBarcode } from "lucide-react-native";
-import { CartProvider } from "~/providers/cart-provider";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-  const { isAuthenticated, loading } = useAuthContext();
+  const { user, setUser, loading } = useAuthContext();
 
   useEffect(() => {
-    if (!isAuthenticated && !loading) {
+    if (!user! && !loading) {
+      setUser!(null);
       router.replace("/(auth)/sign-in");
-      router.canDismiss();
     }
-  }, [isAuthenticated, loading, router]);
+  }, [user, loading, router]);
 
   return (
     <Tabs
@@ -53,9 +50,9 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="sale"
+        name="cart"
         options={{
-          title: "Sale",
+          title: "Cart",
           headerTitleAlign: "center",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
@@ -63,32 +60,27 @@ export default function TabLayout() {
               color={color}
             />
           ),
-          headerRight: () => (
-            <XStack mr={8}>
-              <Button icon={<ScanBarcode size={24} />} size={"$2"} chromeless />
-            </XStack>
-          ),
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="sales"
         options={{
-          title: "Explore",
+          title: "Sales",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
-              name={focused ? "code-slash" : "code-slash-outline"}
+              name={focused ? "list" : "list-outline"}
               color={color}
             />
           ),
         }}
       />
       <Tabs.Screen
-        name="logout"
+        name="settings"
         options={{
-          title: "Logout",
+          title: "Settings",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
-              name={focused ? "log-out" : "log-out-outline"}
+              name={focused ? "settings" : "settings-outline"}
               color={color}
             />
           ),

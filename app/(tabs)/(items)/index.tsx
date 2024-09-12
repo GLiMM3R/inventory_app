@@ -2,19 +2,21 @@ import { StyleSheet, FlatList, RefreshControl } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGetInventories } from "~/features/inventory/query/use-get-inventories";
-import { Input, ListItem, XStack, YStack } from "tamagui";
+import { Button, Input, ListItem, XStack, YStack } from "tamagui";
 import {
   ImageIcon,
-  PlusCircleIcon,
+  PlusCircle,
   ScanBarcode,
   Search,
 } from "lucide-react-native";
 import { Link } from "expo-router";
+import { useCart } from "~/providers/cart-provider";
 
 const Sale = () => {
   const [filters, setFilters] = useState("");
   const [refreshing, setRefreshing] = useState(false);
   const { data, refetch } = useGetInventories(filters);
+  const { addItem } = useCart();
 
   useEffect(() => {
     refetch();
@@ -46,11 +48,27 @@ const Sale = () => {
               borderRadius={8}
               elevation={1}
               backgroundColor={"white"}
+              iconAfter={() => (
+                <Button
+                  circular
+                  onPress={() =>
+                    addItem({
+                      id: item.inventory_id,
+                      name: item.name,
+                      price: item.price,
+                      quantity: 1,
+                    })
+                  }
+                >
+                  <PlusCircle color={"black"} size={18} />
+                </Button>
+              )}
             >
               {"$" + item.price.toFixed(2)}
             </ListItem>
           </Link>
         )}
+        stickyHeaderIndices={[0]}
         ListHeaderComponent={() => (
           <XStack alignItems="center" mb={8}>
             <Search color={"gray"} style={styles.searchIcon} />

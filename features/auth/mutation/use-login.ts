@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { login } from "../api/auth.service";
+import { signIn } from "../api/auth.service";
 
 export const useLogin = () => {
   const mutation = useMutation({
@@ -9,7 +9,7 @@ export const useLogin = () => {
     }: {
       username: string;
       password: string;
-    }) => await login(username, password),
+    }) => await signIn(username, password),
   });
 
   return mutation;

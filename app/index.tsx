@@ -10,7 +10,7 @@ const App = () => {
         <Text fontSize={24}>Welcome</Text>
         <Button
           theme={"blue_active"}
-          onPress={() => router.push("/(auth)/sign-in")}
+          onPress={() => router.replace("/(auth)/sign-in")}
         >
           Continue
         </Button>

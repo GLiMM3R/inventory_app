@@ -1,5 +1,4 @@
 import axios from "axios";
-import { router } from "expo-router";
 import * as SecureStorage from "expo-secure-store";
 import { Response } from "~/types/reponse";
 import { Auth } from "~/features/auth/model/auth";
@@ -58,8 +57,7 @@ instance.interceptors.response.use(
         // Handle logout or redirect to login page
         await SecureStorage.deleteItemAsync("access_token");
         await SecureStorage.deleteItemAsync("refresh_token");
-        router.replace("/(auth)/sign-in");
-        router.canGoBack();
+        await SecureStorage.deleteItemAsync("user");
         return Promise.reject(refreshError);
       }
     }
