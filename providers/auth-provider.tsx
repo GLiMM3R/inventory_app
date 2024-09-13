@@ -45,7 +45,7 @@ const AuthProvider: React.FC<Props> = ({ children }) => {
 
       if (user && access_token) {
         setUser(JSON.parse(user));
-        router.replace("/(tabs)/(items)/");
+        router.replace("/(tabs)/(products)/");
         router.canGoBack();
       } else {
         setUser(null);
@@ -71,7 +71,7 @@ const AuthProvider: React.FC<Props> = ({ children }) => {
         onSuccess: async (data) => {
           if (data) {
             setUser(data);
-            router.replace("/(tabs)/(items)/");
+            router.replace("/(tabs)/(products)/");
             router.canGoBack();
           }
           setIsLoading(false);

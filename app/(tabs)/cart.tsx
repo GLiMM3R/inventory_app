@@ -1,15 +1,18 @@
 import { StyleSheet, FlatList, Alert } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Button, ListItem, Spinner, Text, View, XStack, YStack } from "tamagui";
 import {
-  Delete,
-  DeleteIcon,
-  ImageIcon,
-  Minus,
-  Plus,
-  Trash,
-} from "lucide-react-native";
+  Button,
+  H5,
+  Image,
+  ListItem,
+  Spinner,
+  Text,
+  View,
+  XStack,
+  YStack,
+} from "tamagui";
+import { Minus, Plus, ShoppingCart, Trash } from "lucide-react-native";
 import { useCart } from "~/providers/cart-provider";
 import { useCheckout } from "~/features/sale/mutation/use-checkout";
 import { SaleDto } from "~/features/sale/dto/sale.dto";
@@ -44,6 +47,7 @@ const Sale = () => {
       },
       onError: (error) => {
         setLoading(false);
+        Alert.alert(error.message);
       },
     });
   };
@@ -66,7 +70,21 @@ const Sale = () => {
                 borderRadius={8}
                 title={item.name}
                 subTitle={`Qty: ${item.quantity}`}
-                icon={() => <ImageIcon size={48} color={"gray"} />}
+                icon={() => (
+                  <View
+                    width={64}
+                    height={64}
+                    borderRadius={8}
+                    overflow="hidden"
+                  >
+                    <Image
+                      objectFit="cover"
+                      source={require("@/assets/images/dummy.jpg")}
+                      width={"100%"}
+                      height={"100%"}
+                    />
+                  </View>
+                )}
                 iconAfter={() => (
                   <XStack gap={4}>
                     <Button
@@ -103,17 +121,17 @@ const Sale = () => {
           />
         </View>
         <View flexDirection="row" justifyContent="space-between">
-          <Text>Total:</Text>
-          <Text>${total}</Text>
+          <H5>Total:</H5>
+          <H5>${total}</H5>
         </View>
-        <View my={8}>
+        <View my={16}>
           <Button
-            icon={loading ? <Spinner /> : undefined}
+            icon={loading ? <Spinner /> : <ShoppingCart size={18} />}
             onPress={onSubmit}
-            theme={items.length ? "yellow_active" : "dark_yellow"}
+            theme={items.length ? "green_active" : "dark_green"}
             disabled={items.length < 1}
           >
-            Checkout
+            CHECKOUT
           </Button>
         </View>
       </View>

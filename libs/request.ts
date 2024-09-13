@@ -2,6 +2,7 @@ import axios from "axios";
 import * as SecureStorage from "expo-secure-store";
 import { Response } from "~/types/reponse";
 import { Auth } from "~/features/auth/model/auth";
+import { router } from "expo-router";
 
 const instance = axios.create({
   baseURL: process.env.EXPO_PUBLIC_API_URL, // Your API base URL
@@ -36,6 +37,7 @@ instance.interceptors.response.use(
   },
   async (error) => {
     const originalRequest = error.config;
+
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
@@ -53,11 +55,11 @@ instance.interceptors.response.use(
 
         return instance(originalRequest);
       } catch (refreshError) {
-        console.error("Token refresh failed:", refreshError);
         // Handle logout or redirect to login page
         await SecureStorage.deleteItemAsync("access_token");
         await SecureStorage.deleteItemAsync("refresh_token");
         await SecureStorage.deleteItemAsync("user");
+        router.replace("/(auth)/sign-in");
         return Promise.reject(refreshError);
       }
     }

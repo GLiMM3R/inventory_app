@@ -24,26 +24,13 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="(products)"
         options={{
+          headerShown: false,
           title: "Home",
-          headerTitleAlign: "center",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               name={focused ? "home" : "home-outline"}
-              color={color}
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="(items)"
-        options={{
-          title: "Products",
-          headerShown: false,
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              name={focused ? "cube" : "cube-outline"}
               color={color}
             />
           ),
@@ -69,6 +56,19 @@ export default function TabLayout() {
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               name={focused ? "list" : "list-outline"}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="(inventories)"
+        options={{
+          title: "Inventory",
+          headerShown: false,
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon
+              name={focused ? "cube" : "cube-outline"}
               color={color}
             />
           ),
