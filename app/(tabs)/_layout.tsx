@@ -14,7 +14,7 @@ export default function TabLayout() {
       setUser!(null);
       router.replace("/(auth)/sign-in");
     }
-  }, [user, loading, router]);
+  }, [user, loading]);
 
   return (
     <Tabs
@@ -50,18 +50,6 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="sales"
-        options={{
-          title: "Sales",
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              name={focused ? "list" : "list-outline"}
-              color={color}
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
         name="(inventories)"
         options={{
           title: "Inventory",
@@ -69,6 +57,18 @@ export default function TabLayout() {
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               name={focused ? "cube" : "cube-outline"}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="report"
+        options={{
+          title: "Report",
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon
+              name={focused ? "list" : "list-outline"}
               color={color}
             />
           ),

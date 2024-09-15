@@ -6,6 +6,10 @@ const ItemsLayout = () => {
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="price_history" options={{ headerShown: true }} />
+      <Stack.Screen
+        name="transfer_item"
+        options={{ title: "Transfer Item", headerShown: true }}
+      />
     </Stack>
   );
 };

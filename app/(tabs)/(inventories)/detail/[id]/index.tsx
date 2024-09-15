@@ -6,18 +6,16 @@ import {
   Alert,
   ToastAndroid,
 } from "react-native";
-import {
-  Href,
-  Link,
-  router,
-  Stack,
-  useLocalSearchParams,
-  usePathname,
-} from "expo-router";
+import { Link, router, Stack, useLocalSearchParams } from "expo-router";
 import { useGetInventory } from "~/features/inventory/query/use-get-inventory";
 import ParallaxScrollView from "~/components/ParallaxScrollView";
 import { Button, H4, Image, Separator, View, XStack } from "tamagui";
-import { CalendarClock, Edit, History } from "lucide-react-native";
+import {
+  ArrowLeftRight,
+  CalendarClock,
+  Edit,
+  History,
+} from "lucide-react-native";
 import SheetComponent from "@/components/Sheet";
 import { useCreatePrice } from "~/features/price/mutation/use-create-price";
 import dayjs from "dayjs";
@@ -90,6 +88,17 @@ const Detail = () => {
               <TouchableOpacity onPress={() => setOpen(true)}>
                 <CalendarClock color={"black"} />
               </TouchableOpacity>
+              <Link
+                href={{
+                  pathname: "/(inventories)/detail/[id]/transfer_item",
+                  params: { id: id },
+                }}
+                asChild
+              >
+                <TouchableOpacity>
+                  <ArrowLeftRight color={"black"} />
+                </TouchableOpacity>
+              </Link>
             </XStack>
           ),
         }}

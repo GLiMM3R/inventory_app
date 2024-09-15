@@ -19,7 +19,7 @@ instance.interceptors.request.use(
     // You can modify the request config here
     const token = await SecureStorage.getItemAsync("access_token");
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers.Authorization = `Bearer ${token.trim()}`;
     }
     // For example, add an auth token
     return config;
@@ -41,9 +41,15 @@ instance.interceptors.response.use(
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
-        const { data } = await axios.post<Response<Auth>>(
+        const refreshToken = await SecureStorage.getItemAsync("refresh_token");
+
+        const { data } = await axios.get<Response<Auth>>(
           `${process.env.EXPO_PUBLIC_API_URL}/auth/refresh-token`,
-          undefined
+          {
+            headers: {
+              Authorization: `Bearer ${refreshToken?.trim()}`,
+            },
+          }
         );
 
         originalRequest.headers.Authorization = `Bearer ${data.data?.access_token}`;
@@ -55,6 +61,7 @@ instance.interceptors.response.use(
 
         return instance(originalRequest);
       } catch (refreshError) {
+        console.error("Refresh token failed:", refreshError);
         // Handle logout or redirect to login page
         await SecureStorage.deleteItemAsync("access_token");
         await SecureStorage.deleteItemAsync("refresh_token");

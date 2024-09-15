@@ -49,23 +49,26 @@ const AuthProvider: React.FC<Props> = ({ children }) => {
   }, []);
 
   const checkAuth = async () => {
-    setIsLoading(true);
     try {
+      setIsLoading(true);
       const user = await SecureStorage.getItemAsync("user");
-      const access_token = await SecureStorage.getItemAsync("access_token");
+      const refresh_token = await SecureStorage.getItemAsync("refresh_token");
+      console.log("🚀 ~ checkAuth ~ user:", user);
+      console.log("🚀 ~ checkAuth ~ refresh_token:", refresh_token);
 
-      if (user && access_token) {
+      if (user && refresh_token) {
         setUser(JSON.parse(user));
         router.replace("/(tabs)/(products)/");
         router.canGoBack();
       } else {
         setUser(null);
       }
+      setIsLoading(false);
     } catch (error) {
       setUser(null);
+      setIsLoading(false);
       Alert.alert("Credentials failed");
     }
-    setIsLoading(false);
   };
 
   const onLogin = async ({
@@ -128,6 +131,7 @@ const AuthProvider: React.FC<Props> = ({ children }) => {
       { username: username },
       {
         onSuccess: () => {
+          setIsLoading(false);
           router.push({
             pathname: "/(auth)/otp",
             params: {
@@ -137,11 +141,11 @@ const AuthProvider: React.FC<Props> = ({ children }) => {
           });
         },
         onError: (error) => {
+          setIsLoading(false);
           alert(`Error sending OTP: ${error.message}`);
         },
       }
     );
-    setIsLoading(false);
   };
 
   const value: AuthContextProps = {
