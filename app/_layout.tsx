@@ -53,11 +53,19 @@ export default function RootLayout() {
                     options={{ headerShown: false }}
                   />
                   <Stack.Screen
+                    name="(inventories)"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
                     name="(report)"
                     options={{ headerShown: false }}
                   />
                   <Stack.Screen
                     name="(branch)"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="(users)"
                     options={{ headerShown: false }}
                   />
                   <Stack.Screen

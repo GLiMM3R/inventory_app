@@ -4,11 +4,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Button, Spinner } from "tamagui";
 import { useAuthContext } from "@/providers/auth-provider";
 import { LogOut } from "lucide-react-native";
-import axios from "axios";
-import { Response } from "~/types/reponse";
-import { Auth } from "~/features/auth/model/auth";
-import * as SecureStorage from "expo-secure-store";
-import { router } from "expo-router";
 
 const Settings = () => {
   const { loading, onLogout } = useAuthContext();
@@ -19,9 +14,6 @@ const Settings = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <Button theme={"blue"} onPress={() => router.push("/(branch)/")}>
-        Go to branch
-      </Button>
       <Button
         theme={"red"}
         onPress={handleLogout}

@@ -22,7 +22,7 @@ const TransferItem = () => {
         {
           onSuccess: () => {
             setLoading(false);
-            router.push("/(tabs)/(inventories)/");
+            router.push("/(inventories)/");
             alert("Transfer successful!");
           },
           onError: (error) => {

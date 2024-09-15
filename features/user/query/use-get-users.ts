@@ -1,17 +1,12 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { fetchBranches } from "../api/branch.service";
+import { fetchUsers } from "../api/user.service";
 
-type Props = {
-  not_self?: boolean;
-};
-
-export const useGetBranches = ({ not_self }: Props) => {
+export const useGetUsers = () => {
   const query = useInfiniteQuery({
-    queryKey: ["branches"],
+    queryKey: ["users"],
     queryFn: async ({ pageParam = 1 }) =>
-      await fetchBranches({
+      await fetchUsers({
         pageParam,
-        not_self: not_self ?? false,
       }),
     initialPageParam: 1,
     getNextPageParam: (lastPage, pages) => pages.length + 1,

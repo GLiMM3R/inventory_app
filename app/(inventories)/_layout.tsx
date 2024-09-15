@@ -15,7 +15,7 @@ const InventoriesLayout = () => {
           headerRight: () => (
             <XStack mr={8} justifyContent="flex-end">
               <TouchableOpacity
-                onPress={() => router.push("/(tabs)/(inventories)/form/create")}
+                onPress={() => router.push("/(inventories)/form/create")}
               >
                 <PlusCircleIcon color={"black"} />
               </TouchableOpacity>

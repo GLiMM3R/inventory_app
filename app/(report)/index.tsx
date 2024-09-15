@@ -9,12 +9,13 @@ import {
 import React, { useEffect, useState } from "react";
 import { useGetSalesReport } from "~/features/report/query/use-get-sales-report";
 import dayjs from "dayjs";
-import { Card, H4, H5, Input, Paragraph, View, XStack } from "tamagui";
+import { Card, H4, H5, Input, Paragraph, Spinner, View, XStack } from "tamagui";
 import {
   DateTimePickerAndroid,
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 import { Calendar } from "lucide-react-native";
+import { debounce } from "~/libs/utils";
 
 const SalesReport = () => {
   const currentDate = dayjs();
@@ -24,7 +25,7 @@ const SalesReport = () => {
   const [endDate, setEndDate] = useState(
     currentDate.endOf("month").format("YYYY-MM-DD")
   );
-  const { data, fetchNextPage, refetch } = useGetSalesReport({
+  const { data, fetchNextPage, refetch, isLoading } = useGetSalesReport({
     startDate,
     endDate,
   });
@@ -46,6 +47,7 @@ const SalesReport = () => {
         }
 
         currentDate && setStartDate(dayjs(currentDate).format("YYYY-MM-DD"));
+        handleChange();
       },
       mode: currentMode,
       is24Hour: true,
@@ -68,15 +70,24 @@ const SalesReport = () => {
         }
 
         currentDate && setEndDate(dayjs(currentDate).format("YYYY-MM-DD"));
+        handleChange();
       },
       mode: currentMode,
       is24Hour: true,
     });
   };
 
-  useEffect(() => {
-    refetch();
-  }, [startDate, endDate]);
+  if (isLoading) {
+    return (
+      <View flex={1} justifyContent="center" alignItems="center">
+        <Spinner />
+      </View>
+    );
+  }
+
+  const handleChange = debounce(async () => {
+    await refetch();
+  }, 300);
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -117,15 +128,15 @@ const SalesReport = () => {
 
       <View flex={1}>
         <FlatList
-          data={data?.pages.flat()}
+          data={data?.pages.flat() ?? []}
           contentContainerStyle={{ gap: 8, padding: 8 }}
           keyExtractor={(item) => item.order_number}
           renderItem={({ item }) => (
-            <Card theme={"blue"}>
+            <Card key={item.order_number} theme={"blue"}>
               <Card.Header>
                 <H5>{item.order_number}</H5>
                 <Paragraph>Quantity: {item.total_quantity}</Paragraph>
-                <Paragraph>Total: ${item.net_amount.toFixed(2)}</Paragraph>
+                <Paragraph>Total: ${item.net_amount}</Paragraph>
                 <Paragraph color={"gray"}>
                   {dayjs.unix(item.sale_date).format("DD-MM-YYYY hh:mm:ss")}
                 </Paragraph>

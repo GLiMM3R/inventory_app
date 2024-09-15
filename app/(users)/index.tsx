@@ -4,15 +4,26 @@ import {
   SafeAreaView,
   StyleSheet,
 } from "react-native";
-import React, { useState } from "react";
-import { useGetBranches } from "~/features/branch/query/use-get-branches";
-import { Button, H4, ListItem, Spinner, Text, View } from "tamagui";
+import React, { useEffect, useState } from "react";
+import {
+  Avatar,
+  Button,
+  Input,
+  ListItem,
+  Spinner,
+  Text,
+  View,
+  XStack,
+} from "tamagui";
+import { useGetUsers } from "~/features/user/query/use-get-users";
 import dayjs from "dayjs";
-import { Edit } from "lucide-react-native";
+import { Edit, Search } from "lucide-react-native";
+import { router } from "expo-router";
 
-const Branch = () => {
-  const { data, fetchNextPage, refetch, isLoading } = useGetBranches({});
+const Users = () => {
+  const { data, refetch, fetchNextPage, isLoading } = useGetUsers();
   const [refreshing, setRefreshing] = useState(false);
+  const [filters, setFilters] = useState();
 
   if (isLoading) {
     return (
@@ -29,21 +40,41 @@ const Branch = () => {
   };
   return (
     <SafeAreaView style={styles.safeArea}>
+      <XStack alignItems="center" mt={8} mx={8}>
+        <Search color={"gray"} style={styles.searchIcon} />
+        <Input
+          flex={1}
+          value={filters}
+          style={styles.searchInput}
+          placeholder="Search name"
+          onChange={() => {}}
+        />
+      </XStack>
       <View flex={1}>
         <FlatList
           data={data?.pages.flat() ?? []}
           contentContainerStyle={{ gap: 8, padding: 8 }}
-          keyExtractor={(item) => item.branch_id}
+          keyExtractor={(item) => item.user_id}
           renderItem={({ item }) => (
             <ListItem
-              key={item.branch_id}
+              key={item.user_id}
+              icon={() => (
+                <Avatar circular size="$5">
+                  <Avatar.Image
+                    accessibilityLabel="Cam"
+                    src="https://images.unsplash.com/photo-1548142813-c348350df52b?&w=150&h=150&dpr=2&q=80"
+                  />
+                  <Avatar.Fallback backgroundColor="$blue10" />
+                </Avatar>
+              )}
               theme={"blue"}
               borderRadius={8}
               elevation={1}
-              title={item.name}
+              title={item.username}
               subTitle={dayjs
                 .unix(item.updated_at)
                 .format("YYYY-MM-DD hh:mm:ss")}
+              onPress={() => router.push(`/${item.user_id}`)}
             />
           )}
           ListEmptyComponent={() => (
@@ -56,27 +87,6 @@ const Branch = () => {
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
         />
-        <View
-          position="absolute"
-          justifyContent="center"
-          alignItems="center"
-          bottom={10}
-          right={16}
-        >
-          {/* <Link
-            href={{ pathname: "/(inventories)/form/[id]", params: { id } }}
-            asChild
-          > */}
-          <Button
-            circular
-            size={"$5"}
-            theme={"blue"}
-            // onPress={() => setOpenEdit(true)}
-          >
-            <Edit color={"black"} />
-          </Button>
-          {/* </Link> */}
-        </View>
       </View>
     </SafeAreaView>
   );
@@ -86,14 +96,13 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
   },
-  dateInput: {
-    width: "100%",
+  searchInput: {
+    paddingLeft: 40,
   },
-  calendarIcon: {
+  searchIcon: {
     position: "absolute",
-    right: 10,
+    left: 10,
     zIndex: 10,
   },
 });
-
-export default Branch;
+export default Users;
