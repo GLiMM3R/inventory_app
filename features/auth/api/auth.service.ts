@@ -3,11 +3,16 @@ import { Auth } from "../model/auth";
 import { Response } from "@/types/reponse";
 import * as SecureStorage from "expo-secure-store";
 
-export const signIn = async (username: string, password: string) => {
+export const signIn = async (
+  username: string,
+  password: string,
+  otp: string
+) => {
   try {
     const { data } = await axios.post<Response<Auth>>(`/auth/login`, {
       username,
       password,
+      otp,
     });
 
     await SecureStorage.setItemAsync("access_token", data.data.access_token);
@@ -40,4 +45,10 @@ export const signOut = async () => {
   await SecureStorage.deleteItemAsync("access_token");
   await SecureStorage.deleteItemAsync("refresh_token");
   await SecureStorage.deleteItemAsync("user");
+};
+
+export const sendOTP = async (username: string) => {
+  await axios.post<Response<{ message: string }>>(`/auth/send-otp`, {
+    username,
+  });
 };

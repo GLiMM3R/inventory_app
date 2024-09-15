@@ -1,18 +1,14 @@
 import React from "react";
 import { Button, Form, Input, Label, Spinner, Text, YStack } from "tamagui";
-import { z } from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-const LoginFormSchema = z.object({
-  username: z
-    .string()
-    .min(3, { message: "Username must be at least 3 characters long!" }),
-  password: z.string().min(5, { message: "Password lenght must more than 5!" }),
-});
+import {
+  LoginSchema,
+  LoginSchemaType,
+} from "~/features/auth/schema/auth-schema";
 
 type Props = {
-  onSubmit: (values: z.infer<typeof LoginFormSchema>) => void;
+  onSubmit: (values: LoginSchemaType) => void;
   loading: boolean;
 };
 
@@ -21,15 +17,15 @@ const LoginForm = ({ onSubmit, loading }: Props) => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<z.infer<typeof LoginFormSchema>>({
-    resolver: zodResolver(LoginFormSchema),
+  } = useForm<LoginSchemaType>({
+    resolver: zodResolver(LoginSchema),
     defaultValues: {
       username: "",
       password: "",
     },
   });
 
-  const submit = (values: z.infer<typeof LoginFormSchema>) => {
+  const submit = (values: LoginSchemaType) => {
     onSubmit(values);
   };
 

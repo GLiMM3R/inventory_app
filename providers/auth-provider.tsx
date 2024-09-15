@@ -5,6 +5,7 @@ import { useLogin } from "~/features/auth/mutation/use-login";
 import { useLogout } from "~/features/auth/mutation/use-logout";
 import * as SecureStorage from "expo-secure-store";
 import { User } from "~/features/auth/model/auth";
+import { useSendOTP } from "~/features/auth/mutation/use-send-otp";
 
 type Props = {
   children: React.ReactNode;
@@ -16,11 +17,20 @@ interface AuthContextProps {
   onLogin?: ({
     username,
     password,
+    otp,
+  }: {
+    username: string;
+    password: string;
+    otp: string;
+  }) => Promise<void>;
+  onLogout?: () => Promise<void>;
+  onSendOTP?: ({
+    username,
+    password,
   }: {
     username: string;
     password: string;
   }) => Promise<void>;
-  onLogout?: () => Promise<void>;
   loading?: boolean;
 }
 
@@ -32,6 +42,7 @@ const AuthProvider: React.FC<Props> = ({ children }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const mutationLogin = useLogin();
   const mutationLogout = useLogout();
+  const mutationOTP = useSendOTP();
 
   useEffect(() => {
     checkAuth();
@@ -60,13 +71,15 @@ const AuthProvider: React.FC<Props> = ({ children }) => {
   const onLogin = async ({
     username,
     password,
+    otp,
   }: {
     username: string;
     password: string;
+    otp: string;
   }) => {
     setIsLoading(true);
     mutationLogin.mutate(
-      { username, password },
+      { username, password, otp },
       {
         onSuccess: async (data) => {
           if (data) {
@@ -88,6 +101,7 @@ const AuthProvider: React.FC<Props> = ({ children }) => {
   };
 
   const onLogout = async () => {
+    setIsLoading(true);
     mutationLogout.mutate(undefined, {
       onSuccess: async () => {
         setUser(null);
@@ -99,6 +113,35 @@ const AuthProvider: React.FC<Props> = ({ children }) => {
         router.replace("/(auth)/sign-in");
       },
     });
+    setIsLoading(false);
+  };
+
+  const onSendOTP = async ({
+    username,
+    password,
+  }: {
+    username: string;
+    password: string;
+  }) => {
+    setIsLoading(true);
+    mutationOTP.mutate(
+      { username: username },
+      {
+        onSuccess: () => {
+          router.push({
+            pathname: "/(auth)/otp",
+            params: {
+              username,
+              password,
+            },
+          });
+        },
+        onError: (error) => {
+          alert(`Error sending OTP: ${error.message}`);
+        },
+      }
+    );
+    setIsLoading(false);
   };
 
   const value: AuthContextProps = {
@@ -106,6 +149,7 @@ const AuthProvider: React.FC<Props> = ({ children }) => {
     setUser: setUser,
     onLogin,
     onLogout,
+    onSendOTP,
     loading: isLoading,
   };
 

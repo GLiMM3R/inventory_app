@@ -1,14 +1,15 @@
 import { StyleSheet } from "react-native";
-import React, { useEffect } from "react";
+import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import LoginForm from "~/components/auth/LoginForm";
+import { LoginSchemaType } from "~/features/auth/schema/auth-schema";
 import { useAuthContext } from "~/providers/auth-provider";
 
 const SignIn = () => {
-  const { onLogin, loading } = useAuthContext();
+  const { onSendOTP, loading } = useAuthContext();
 
-  const onSubmit = async (values: any) => {
-    await onLogin!({
+  const onSubmit = async (values: LoginSchemaType) => {
+    onSendOTP!({
       username: values.username.trim(),
       password: values.password,
     });

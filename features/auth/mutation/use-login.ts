@@ -6,10 +6,12 @@ export const useLogin = () => {
     mutationFn: async ({
       username,
       password,
+      otp,
     }: {
       username: string;
       password: string;
-    }) => await signIn(username, password),
+      otp: string;
+    }) => await signIn(username, password, otp),
   });
 
   return mutation;

@@ -1,13 +1,15 @@
 import { StyleSheet, View } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Button, ListItem, Separator, Spinner, YGroup } from "tamagui";
-import { useAuthContext } from "~/providers/auth-provider";
+import { Button, Spinner } from "tamagui";
+import { useAuthContext } from "@/providers/auth-provider";
 import { LogOut } from "lucide-react-native";
 
 const Settings = () => {
   const { loading, onLogout } = useAuthContext();
   const handleLogout = async () => {
+    console.log("pressed");
+
     await onLogout!();
   };
   return (
