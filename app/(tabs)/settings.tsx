@@ -7,9 +7,8 @@ import { LogOut } from "lucide-react-native";
 
 const Settings = () => {
   const { loading, onLogout } = useAuthContext();
-  const handleLogout = async () => {
-    console.log("pressed");
 
+  const handleLogout = async () => {
     await onLogout!();
   };
   return (
