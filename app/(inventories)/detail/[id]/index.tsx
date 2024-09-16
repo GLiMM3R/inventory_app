@@ -26,7 +26,7 @@ import ProductForm from "~/components/product/ProductForm";
 
 const Detail = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { data: inventory } = useGetInventory(id);
+  const { data: inventory, refetch } = useGetInventory(id);
   const [open, setOpen] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -62,7 +62,9 @@ const Detail = () => {
         // <Ionicons size={310} name="code-slash" style={styles.headerImage} />
         <Image
           key={id.toString()}
-          src={"https://picsum.photos/300/200"}
+          src={
+            "https://images.unsplash.com/photo-1726059968922-0396248fdaea?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          }
           width={400}
           height={260}
         />
@@ -151,6 +153,13 @@ const Detail = () => {
         <View flexBasis={"48%"}>
           <Text style={styles.label}>Price:</Text>
           <Text>${inventory?.price}</Text>
+        </View>
+      </View>
+      <Separator alignSelf="stretch" marginHorizontal={0} marginVertical={1} />
+      <View flexDirection="row" width={"100%"} justifyContent="space-between">
+        <View flexBasis={"48%"}>
+          <Text style={styles.label}>Status:</Text>
+          <Text>{inventory?.status}</Text>
         </View>
       </View>
       <Separator alignSelf="stretch" marginHorizontal={0} marginVertical={1} />

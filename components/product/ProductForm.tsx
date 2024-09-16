@@ -7,6 +7,8 @@ import {
   InventorySchema,
   InventorySchemaType,
 } from "~/features/inventory/schema/inventory-schema";
+import { View } from "tamagui";
+import { Picker } from "@react-native-picker/picker";
 
 type Props = {
   onSubmit: (values: InventorySchemaType) => void;
@@ -25,6 +27,7 @@ const ProductForm = ({ onSubmit, loading, data }: Props) => {
       name: data?.name ?? "",
       quantity: data?.quantity.toString() ?? "0",
       price: data?.price.toString() ?? "0",
+      status: data?.status ?? "active",
     },
   });
 
@@ -93,6 +96,36 @@ const ProductForm = ({ onSubmit, loading, data }: Props) => {
         {errors.quantity && (
           <Text color={"red"}>{errors.quantity.message}</Text>
         )}
+        <Label>Status</Label>
+        <Controller
+          name="status"
+          control={control}
+          rules={{
+            required: true,
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <View
+              backgroundColor={"$background075"}
+              height={44}
+              borderRadius={8}
+              justifyContent="center"
+            >
+              <Picker
+                selectedValue={value}
+                onValueChange={(itemValue, itemIndex) => onChange(itemValue)}
+              >
+                <Picker.Item key="active" label="Active" value="active" />
+                <Picker.Item
+                  key="deprecated"
+                  label="Deprecated"
+                  value="deprecated"
+                />
+                <Picker.Item key="sold" label="Sold" value="sold" />
+              </Picker>
+            </View>
+          )}
+        />
+        {errors.status && <Text color={"red"}>{errors.status.message}</Text>}
       </YStack>
       <Form.Trigger asChild disabled={loading}>
         <Button theme={"blue"} icon={loading ? <Spinner /> : undefined}>

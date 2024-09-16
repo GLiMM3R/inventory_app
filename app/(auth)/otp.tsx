@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     alignItems: "center",
+    backgroundColor: "#D2E0FB", // Background color for the splash screen
   },
 });
 

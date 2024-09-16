@@ -2,7 +2,17 @@ import { StyleSheet, FlatList, RefreshControl } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGetInventories } from "~/features/inventory/query/use-get-inventories";
-import { Image, Input, ListItem, Spinner, View, XStack } from "tamagui";
+import {
+  H6,
+  Image,
+  Input,
+  ListItem,
+  Spinner,
+  Square,
+  Text,
+  View,
+  XStack,
+} from "tamagui";
 import { ScanBarcode, Search } from "lucide-react-native";
 import { Link } from "expo-router";
 
@@ -71,6 +81,15 @@ const Inventories = () => {
                       height={"100%"}
                     />
                   </View>
+                )}
+                iconAfter={() => (
+                  <H6 color="gray" fontSize={12}>
+                    {item.status === "active"
+                      ? "In-Stock"
+                      : item.status === "sold"
+                      ? "Sold Out"
+                      : "Deprecated"}
+                  </H6>
                 )}
                 borderRadius={8}
                 elevation={1}

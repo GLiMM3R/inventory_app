@@ -53,8 +53,6 @@ const AuthProvider: React.FC<Props> = ({ children }) => {
       setIsLoading(true);
       const user = await SecureStorage.getItemAsync("user");
       const refresh_token = await SecureStorage.getItemAsync("refresh_token");
-      console.log("🚀 ~ checkAuth ~ user:", user);
-      console.log("🚀 ~ checkAuth ~ refresh_token:", refresh_token);
 
       if (user && refresh_token) {
         setUser(JSON.parse(user));

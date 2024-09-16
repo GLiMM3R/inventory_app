@@ -10,6 +10,11 @@ export const InventorySchema = z.object({
   price: z.string().refine((val) => !isNaN(Number(val)) && Number(val) > 0, {
     message: "Price must be a positive number",
   }),
+  status: z
+    .string()
+    .refine((val) => ["active", "deprecated", "sold"].includes(val), {
+      message: "Status must be one of 'active', 'deprecated', or 'sold'",
+    }),
 });
 
 export type InventorySchemaType = z.infer<typeof InventorySchema>;

@@ -21,7 +21,7 @@ const Form = () => {
       {
         onSuccess: () => {
           setLoading(false);
-          router.push(`/(items)/detail/${id}`);
+          router.replace(`/(inventories)/detail/${id}`);
         },
         onError: (error) => {
           setLoading(false);

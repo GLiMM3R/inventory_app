@@ -1,21 +1,24 @@
-import { StyleSheet, FlatList, RefreshControl } from "react-native";
+import {
+  StyleSheet,
+  FlatList,
+  RefreshControl,
+  NativeSyntheticEvent,
+  TextInputChangeEventData,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGetInventories } from "~/features/inventory/query/use-get-inventories";
-import { Button, Input, ListItem, View, XStack, YStack } from "tamagui";
-import {
-  ImageIcon,
-  PlusCircle,
-  Scale,
-  ScanBarcode,
-  Search,
-} from "lucide-react-native";
-import { Link } from "expo-router";
+import { Input, View, XStack } from "tamagui";
+import { ScanBarcode, Search } from "lucide-react-native";
 import { useCart } from "~/providers/cart-provider";
 import ProductCard from "~/components/product/ProductCard";
+import { debounce } from "~/libs/utils";
 
 const Home = () => {
-  const [filters, setFilters] = useState("");
+  const [filters, setFilters] = useState({
+    status: "active",
+    search: "",
+  });
   const [refreshing, setRefreshing] = useState(false);
   const { data, refetch } = useGetInventories(filters);
   const { addItem } = useCart();
@@ -23,6 +26,13 @@ const Home = () => {
   useEffect(() => {
     refetch();
   }, []);
+
+  const handleSearchChange = debounce(
+    (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
+      setFilters((prev) => ({ ...prev, search: e.nativeEvent.text }));
+    },
+    500
+  );
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -37,10 +47,10 @@ const Home = () => {
         <ScanBarcode color={"gray"} style={styles.barcodeIcon} />
         <Input
           flex={1}
-          value={filters}
+          value={filters.search}
           style={styles.searchInput}
           placeholder="Search name, SKU"
-          onChange={() => {}}
+          onChange={handleSearchChange}
         />
       </XStack>
       <View flex={1}>

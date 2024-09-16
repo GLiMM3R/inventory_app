@@ -25,7 +25,7 @@ const SignIn = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#fff", // Background color for the splash screen
+    backgroundColor: "#D2E0FB", // Background color for the splash screen
     height: "100%",
     justifyContent: "center",
   },

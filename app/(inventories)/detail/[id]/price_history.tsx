@@ -35,8 +35,11 @@ const PriceHistory = () => {
               </ListItem>
             </YGroup.Item>
           )}
-          onEndReached={() => {
-            fetchNextPage();
+          onEndReachedThreshold={0.5}
+          onEndReached={({ distanceFromEnd }) => {
+            if (distanceFromEnd < 0) {
+              fetchNextPage();
+            }
           }}
         />
       </YGroup>
