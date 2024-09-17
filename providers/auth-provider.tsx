@@ -6,6 +6,7 @@ import { useLogout } from "~/features/auth/mutation/use-logout";
 import * as SecureStorage from "expo-secure-store";
 import { User } from "~/features/auth/model/auth";
 import { useSendOTP } from "~/features/auth/mutation/use-send-otp";
+import { health } from "~/features/health/api/health.service";
 
 type Props = {
   children: React.ReactNode;
@@ -50,6 +51,12 @@ const AuthProvider: React.FC<Props> = ({ children }) => {
 
   const checkAuth = async () => {
     try {
+      const response = await health();
+
+      if (response.status !== 200) {
+        alert("Health check failed");
+      }
+
       setIsLoading(true);
       const user = await SecureStorage.getItemAsync("user");
       const refresh_token = await SecureStorage.getItemAsync("refresh_token");

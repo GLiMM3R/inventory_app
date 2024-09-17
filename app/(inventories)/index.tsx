@@ -19,7 +19,8 @@ import { Link } from "expo-router";
 const Inventories = () => {
   const [filters, setFilters] = useState("");
   const [refreshing, setRefreshing] = useState(false);
-  const { data, refetch, isLoading } = useGetInventories(filters);
+  const { data, refetch, isLoading, fetchNextPage } =
+    useGetInventories(filters);
 
   useEffect(() => {
     refetch();
@@ -54,7 +55,7 @@ const Inventories = () => {
       </XStack>
       <View flex={1}>
         <FlatList
-          data={data?.data ?? []}
+          data={data?.pages.flat() ?? []}
           contentContainerStyle={{ gap: 8, padding: 8 }}
           keyExtractor={(item) => item.inventory_id}
           renderItem={({ item }) => (
@@ -99,6 +100,12 @@ const Inventories = () => {
               </ListItem>
             </Link>
           )}
+          onEndReachedThreshold={0.5}
+          onEndReached={({ distanceFromEnd }) => {
+            if (distanceFromEnd < 0) {
+              fetchNextPage();
+            }
+          }}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }

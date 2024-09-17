@@ -20,7 +20,7 @@ const Home = () => {
     search: "",
   });
   const [refreshing, setRefreshing] = useState(false);
-  const { data, refetch } = useGetInventories(filters);
+  const { data, refetch, fetchNextPage } = useGetInventories(filters);
   const { addItem } = useCart();
 
   useEffect(() => {
@@ -55,7 +55,7 @@ const Home = () => {
       </XStack>
       <View flex={1}>
         <FlatList
-          data={data?.data ?? []}
+          data={data?.pages.flat() ?? []}
           numColumns={2}
           contentContainerStyle={{ gap: 8, padding: 8 }}
           columnWrapperStyle={{ gap: 8 }}
@@ -84,6 +84,12 @@ const Home = () => {
               }
             />
           )}
+          onEndReachedThreshold={0.5}
+          onEndReached={({ distanceFromEnd }) => {
+            if (distanceFromEnd < 0) {
+              fetchNextPage();
+            }
+          }}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }

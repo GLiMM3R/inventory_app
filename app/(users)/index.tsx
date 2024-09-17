@@ -17,7 +17,7 @@ import {
 } from "tamagui";
 import { useGetUsers } from "~/features/user/query/use-get-users";
 import dayjs from "dayjs";
-import { Edit, Search } from "lucide-react-native";
+import { Search } from "lucide-react-native";
 import { router } from "expo-router";
 
 const Users = () => {
@@ -82,7 +82,12 @@ const Users = () => {
               No sales data available for the selected date range.
             </Text>
           )}
-          onEndReached={() => fetchNextPage()}
+          onEndReachedThreshold={0.5}
+          onEndReached={({ distanceFromEnd }) => {
+            if (distanceFromEnd < 0) {
+              fetchNextPage();
+            }
+          }}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }

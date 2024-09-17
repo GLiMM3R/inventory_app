@@ -3,13 +3,19 @@ import { Inventory } from "../model/inventory";
 import { Response } from "@/types/reponse";
 import { InventorySchemaType } from "../schema/inventory-schema";
 
-export const fetchInventories = async (filters: any) => {
+type Props = {
+  pageParam: number;
+};
+
+export const fetchInventories = async ({ pageParam }: Props) => {
   try {
-    const response = await axios.get<Response<Inventory[]>>(`/inventories`, {
-      params: filters,
+    const { data } = await axios.get<Response<Inventory[]>>(`/inventories`, {
+      params: {
+        page: pageParam,
+      },
     });
 
-    return response.data;
+    return data.data ?? [];
   } catch (error) {
     throw new Error("Failed to fetch inventories");
   }
